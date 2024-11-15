@@ -106,6 +106,15 @@ impl NamedSemaphore {
         }
         Ok(val)
     }
+
+    pub unsafe fn unlink(name: &str) -> std::io::Result<()> {
+        let name = CString::new(name.as_bytes())?;
+        let res = libc::sem_unlink(name.into_raw());
+        if res == -1 {
+            return Err(Error::last_os_error());
+        }
+        Ok(())
+    }
 }
 
 impl Drop for NamedSemaphore {
