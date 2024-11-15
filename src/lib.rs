@@ -32,6 +32,7 @@ bitflags! {
     }
 }
 
+// TODO Make thread safe
 // #[derive(Send, Sync)]
 pub struct NamedSemaphore {
     raw: *mut sem_t,
@@ -117,11 +118,7 @@ impl Drop for NamedSemaphore {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{
-        fs::{self, File},
-        io::Write,
-        path::Path,
-    };
+    use std::{fs, path::Path};
 
     const SHM_PATH: &str = "/dev/shm";
     const SEM_NAME: &str = "TEST_SEM";
